@@ -63,6 +63,8 @@ https://bitwarden.myselfhosted.com
 
 Obviously you'll want to replace the CLIENTID and CLIENTSECRET with your own API details, and set up the vault with your vault address and your login.  You can either enter your password when prompted, or set up a BWFIX_PASSWORD environment variable if you'd like.
 
+You could run this on windows, linux or mac, I guess, or anywhere where bitwarden cli and python run.  I ran it on linux (Ubuntu) running as WLS2 under Windows 11, but it's all much of a muchness.
+
 ```bash
 sudo snap install bw
 pip install bitwardentools
