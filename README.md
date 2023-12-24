@@ -1,6 +1,23 @@
 # bwfixhttp
 ## Python Script to fix http:// entries in bitwarden, bitwarden self-hosted, and vaultwarden
 
+> [!CAUTION]
+> Make sure you have a backup.
+> 
+> Don't trust this script. It is open source, as is all of the tools it uses, but that doesn't mean you should trust it.
+>
+> It could destroy your vault. I destroyed my vault while testing it.
+>
+> It could send each of your passwords to me (it doesn't, but it could; they are all unencrypted at the point that the script is operating on each login).
+>
+> It relies on a tool that is not actively being maintained.  But it seems to work.
+>
+> Use  at your own risk. Read the source code before using it.  If you're not confident, don't run this.
+>
+> You have been warned.
+>
+> Have a nice day. 🤣
+
 ### bwfixhttp.py Usage
 
 This python script is designed to work with bitwarden, bitwarden self hosted, and vaultwarden.
