@@ -63,10 +63,10 @@ if user is None:
     user = input("Enter userid (email) of account: ")
 
 if client_id is None: 
-    client_id = input("Enter API client_id for account: ")
+    client_id = input("Enter API client_id for account (optional, Required for 2FA protected accounts): ")
 
 if client_secret is None: 
-    client_secret = input("Enter API client_secret for account: ")
+    client_secret = input("Enter API client_secret for account (optional, Required for 2FA protected accounts): ")
 
 if password is None:
     password = getpass.getpass("Enter password of account: ")
