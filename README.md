@@ -4,7 +4,7 @@
 > [!CAUTION]
 > Make sure you have a backup.
 > 
-> Don't trust this script. It is open source, as is all of the tools it uses, but that doesn't mean you should trust it.
+> Don't trust this script. It is open source, as are all of the tools it uses, but that doesn't mean you should trust it.
 >
 > It could destroy your vault. I destroyed my vault while testing it.
 >
