@@ -77,27 +77,33 @@ fixcypher = None #initialise nothing to do
 
 all_ciphers_ids = myclient.get_ciphers()['id'] # get a list of cipher IDs.
 for id, login in all_ciphers_ids.items():
-    if login.type == CipherType.Login: # Only process logins (skip secure notes, cards, identities)
-        if "uris" in login.login: # With URIs (some don't have any)
-            if login.login['uris'] is not None:  # And some have a None type
-                # Check no Passkey or OK to fix / #Check Password History or OK to fix
-                if (fix_passkeys or not ("fido2Credentials" in login.data and login.login['fido2Credentials'] is not None and len(login.login['fido2Credentials']) > 0)) and (fix_history or login.passwordHistory is None): 
-                    for i, uri in enumerate(login.login['uris']): # Process each URI
-                        myuri = uri['uri']
-                        url = urlparse(myuri)
-                        if not myuri == "http://" and url.scheme == "http" and "." in url.hostname and not valid_ip(url.hostname): # only do http, skip non FQDNs (e.g. home devices) and numeric hosts
-                            if fixcypher is None: #if we haven't got a reference to the login yet (important if we're enumerating multiple URIs)
-                                fixcypher = myclient.get_cipher(id,None,None,None,False,None) #get it
-                            newuri = urlunparse(tuple(["https", url.netloc, url.path, url.params, url.query, url.fragment])) #re create the URL with https
-                            fixcypher.login['uris'][i]['uri'] = newuri # and update the login
-                        if myuri == "http://": # empty placeholder; let's delete
-                            newuri = ""
-                            if fixcypher is None: #if we haven't got a reference to the login yet (important if we're enumerating multiple URIs)
-                                fixcypher = myclient.get_cipher(id,None,None,None,False,None) #get it
-                            del fixcypher.login['uris'][i]
-        if  fixcypher is not None: # if we did anything
-            myclient.edit_login(fixcypher, id=login.id) #update.  The id=login.id doesn't *seem* to do anything, but is required for the update to work.  Normally you'd update a field, but we're passing in the entire object.
-            print(f"fixed login '{login.name}' with URI '{newuri}'") #log output
-            myclient.sync #tell other clients
-            fixcypher = None #let the loop know that it can skip updates on next item, if no http sites are found.
+    if not login.type == CipherType.Login: # Only process logins (skip secure notes, cards, identities)
+        continue
+
+    if "uris" in login.login: # With URIs (some don't have any)
+        if login.login['uris'] is None:  # And some have a None type
+            continue
+        # Check no Passkey or OK to fix / #Check Password History or OK to fix
+        if not ((fix_passkeys or not ("fido2Credentials" in login.data and login.login['fido2Credentials'] is not None and len(login.login['fido2Credentials']) > 0)) and (fix_history or login.passwordHistory is None)): 
+            continue
+
+        for i, uri in enumerate(login.login['uris']): # Process each URI
+            myuri = uri['uri']
+            url = urlparse(myuri)
+            if not myuri == "http://" and url.scheme == "http" and "." in url.hostname and not valid_ip(url.hostname): # only do http, skip non FQDNs (e.g. home devices) and numeric hosts
+                if fixcypher is None: #if we haven't got a reference to the login yet (important if we're enumerating multiple URIs)
+                    fixcypher = myclient.get_cipher(id,None,None,None,False,None) #get it
+                newuri = urlunparse(tuple(["https", url.netloc, url.path, url.params, url.query, url.fragment])) #re create the URL with https
+                fixcypher.login['uris'][i]['uri'] = newuri # and update the login
+            elif myuri == "http://": # empty placeholder; let's delete
+                newuri = ""
+                if fixcypher is None: #if we haven't got a reference to the login yet (important if we're enumerating multiple URIs)
+                    fixcypher = myclient.get_cipher(id,None,None,None,False,None) #get it
+                del fixcypher.login['uris'][i]
+
+    if fixcypher is not None: # if we did anything
+        myclient.edit_login(fixcypher, id=login.id) #update.  The id=login.id doesn't *seem* to do anything, but is required for the update to work.  Normally you'd update a field, but we're passing in the entire object.
+        print(f"fixed login '{login.name}' with URI '{newuri}'") #log output
+        myclient.sync #tell other clients
+        fixcypher = None #let the loop know that it can skip updates on next item, if no http sites are found.
 myclient.bust_cache
