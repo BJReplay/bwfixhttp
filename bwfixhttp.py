@@ -102,8 +102,8 @@ for id, login in all_ciphers_ids.items():
                 del fixcypher.login['uris'][i]
 
     if fixcypher is not None: # if we did anything
-            myclient.edit_login(fixcypher, id=login.id) #update.  The id=login.id doesn't *seem* to do anything, but is required for the update to work.  Normally you'd update a field, but we're passing in the entire object.
-            print(f"fixed login '{login.name}' with URI '{newuri}'") #log output
-            myclient.sync #tell other clients
-            fixcypher = None #let the loop know that it can skip updates on next item, if no http sites are found.
+        myclient.edit_login(fixcypher, id=login.id) #update.  The id=login.id doesn't *seem* to do anything, but is required for the update to work.  Normally you'd update a field, but we're passing in the entire object.
+        print(f"fixed login '{login.name}' with URI '{newuri}'") #log output
+        myclient.sync #tell other clients
+        fixcypher = None #let the loop know that it can skip updates on next item, if no http sites are found.
 myclient.bust_cache
