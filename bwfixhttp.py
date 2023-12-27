@@ -84,7 +84,7 @@ for id, login in all_ciphers_ids.items():
         if login.login['uris'] is None:  # And some have a None type
             continue
         # Check no Passkey or OK to fix / #Check Password History or OK to fix
-        if not (fix_passkeys or not ("fido2Credentials" in login.data and login.login['fido2Credentials'] is not None and len(login.login['fido2Credentials']) > 0)) and (fix_history or login.passwordHistory is None): 
+        if not ((fix_passkeys or not ("fido2Credentials" in login.data and login.login['fido2Credentials'] is not None and len(login.login['fido2Credentials']) > 0)) and (fix_history or login.passwordHistory is None)): 
             continue
 
         for i, uri in enumerate(login.login['uris']): # Process each URI
