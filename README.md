@@ -38,6 +38,8 @@ This script will not fix items with Passkeys or Password History by default.
 
 If you want to fix these items, you **must** set environment variables BWFIX_FIXPASSKEYS and/or BWFIX_FIXHISTORY to True.
 
+The script does not report when it skips an item with a Passkey or with Password History: this is because these items will remain (along with other skipped items such as IP address hosts) in the Unsecure websites list, and thus available for review and manual remediation.
+
 > [!WARNING]
 > Testing has found that fixing these logins with Passkeys or Password History results in invalid dates being stored (somewhere, debugging hasn't revealed where) in the item which results in these items
 > a) not being editable and
